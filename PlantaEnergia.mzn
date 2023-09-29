@@ -1,6 +1,8 @@
 % Parámetros
 int: n; % Número de días en el horizonte de planificación
 int: m; % Número de clientes
+int: dias_regimen_alto_permitidos; % Número de días consecutivos permitidos en régimen alto
+int: porcentaje_regimen_alto; % Porcentaje de la capacidad que se considera régimen alto
 set of int: DIAS = 1..n;
 set of int: CLIENTES = 1..m; 
 set of int: PLANTAS = 1..3; % Conjunto de plantas: 1-Nuclear, 2-Hidroeléctrica, 3-Térmica
@@ -33,6 +35,16 @@ constraint forall(c in CLIENTES, d in DIAS) (
 constraint forall(d in DIAS) (
     sum(c in CLIENTES) (entregado[c,d]) <= sum(p in PLANTAS) (produccion[p,d])
 );
+
+% La central hidroeléctrica no puede operar en régimen alto por dos días consecutivos
+constraint forall(d in 2..n) (
+    if produccion[2,d] > porcentaje_regimen_alto * capacidad[2] / 100 then
+        produccion[2,d-1] <= porcentaje_regimen_alto * capacidad[2] / 100
+    else
+        true
+    endif
+);
+
 
 % Objetivo: Maximizar la ganancia neta
 var int: ganancia_neta = sum(c in CLIENTES, d in DIAS) (entregado[c,d] * pago_por_mw[c]) - 

@@ -1,5 +1,7 @@
 n = 3;
 m = 3;
+dias_regimen_alto_permitidos = 1;
+porcentaje_regimen_alto = 80;
 capacidad = [600, 700, 450];
 costo_produccion = [23, 13, 31];
 demanda = [| 610, 1490, 1040
