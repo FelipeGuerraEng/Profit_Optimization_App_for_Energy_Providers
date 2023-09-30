@@ -37,6 +37,9 @@ constraint forall(d in DIAS) (
     sum(c in CLIENTES) (entregado[c,d]) <= sum(p in PLANTAS) (produccion[p,d])
 );
 
+
+% Restricciones de regimen alto para la Central Hidroeléctrica
+
 constraint dias_regimen_alto[1] = if produccion[2,1] > porcentaje_regimen_alto * capacidad[2] / 100 then 1 else 0 endif;
 
 constraint forall(d in 2..n) (
