@@ -2,10 +2,10 @@ n = 3;
 m = 3;
 dias_regimen_alto_permitidos = 1;
 porcentaje_regimen_alto = 80;
-capacidad = [60, 70, 45];
+capacidad = [1000, 300, 500];
 costo_produccion = [23, 13, 31];
-demanda = [| 61, 149, 104
-           | 89, 52, 1350
-           | 97, 73, 89 |];
+demanda = [| 300, 149, 250
+           | 89, 52, 135
+           | 97, 110, 89 |];
 pago_por_mw = [40, 55, 45];
 G = 50;

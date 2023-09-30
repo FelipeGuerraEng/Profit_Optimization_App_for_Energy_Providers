@@ -7,6 +7,7 @@ set of int: DIAS = 1..n;
 set of int: CLIENTES = 1..m; 
 set of int: PLANTAS = 1..3; % Conjunto de plantas: 1-Nuclear, 2-Hidroeléctrica, 3-Térmica
 
+array[DIAS] of var 0..n: dias_regimen_alto;
 array[PLANTAS] of int: capacidad; % Capacidad de producción diaria para cada planta
 array[PLANTAS] of int: costo_produccion; % Costo de producción por MW para cada planta
 array[CLIENTES,DIAS] of int: demanda; % Demanda diaria para cada cliente
@@ -36,13 +37,18 @@ constraint forall(d in DIAS) (
     sum(c in CLIENTES) (entregado[c,d]) <= sum(p in PLANTAS) (produccion[p,d])
 );
 
-% La central hidroeléctrica no puede operar en régimen alto por dos días consecutivos
+constraint dias_regimen_alto[1] = if produccion[2,1] > porcentaje_regimen_alto * capacidad[2] / 100 then 1 else 0 endif;
+
 constraint forall(d in 2..n) (
-    if produccion[2,d] > porcentaje_regimen_alto * capacidad[2] / 100 then
-        produccion[2,d-1] <= porcentaje_regimen_alto * capacidad[2] / 100
+    dias_regimen_alto[d] = if produccion[2,d] > porcentaje_regimen_alto * capacidad[2] / 100 then
+        dias_regimen_alto[d-1] + 1
     else
-        true
+        0
     endif
+);
+
+constraint forall(d in DIAS) (
+    dias_regimen_alto[d] <= dias_regimen_alto_permitidos
 );
 
 

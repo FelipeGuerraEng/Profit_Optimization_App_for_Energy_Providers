@@ -25,33 +25,43 @@ def ejecutar_modelo(archivo_dzn):
 # Crear la interfaz de usuario con Streamlit
 st.title("Optimización de la Ganancia Neta para Proveedores de Energía")
 
+
 # Crear un formulario para ingresar los parámetros
 with st.form("parametros"):
     n = st.number_input("Número de días", value=3, step=1, min_value=1)
     m = st.number_input("Número de clientes", value=3, step=1, min_value=1)
     if st.form_submit_button("Actualizar Clientes"):
         st.experimental_rerun()
+        
+    nombres_plantas = ['Central Nuclear', 'Central Hidroeléctrica', 'Central Térmica']
+    capacidad_inicial = [1000, 300, 500]  # Los valores iniciales de la capacidad
+    df = pd.DataFrame({
+        'Planta': nombres_plantas,
+        'Capacidad General (MW)': capacidad_inicial
+    })
+    df.index = df.index + 1
+    st.table(df)
     dias_regimen_alto_permitidos = st.number_input("Días de régimen alto permitidos para la Central Hidroeléctrica", value=1, step=1, min_value=1)
     porcentaje_regimen_alto = st.number_input("Porcentaje de régimen alto para la Central Hidroeléctrica", value=80, step=1, min_value=1, max_value=100)
     G = st.number_input("Porcentaje mínimo de la demanda por cliente que debe ser satisfecha", value=50, step=1, min_value=1, max_value=100)
-
+     
     # Capacidad de las plantas
-    capacidad = st.text_input("Capacidad de las plantas en MW (separadas por comas)", value="60,70,45").split(',')
+    capacidad = st.text_input("Capacidad de las plantas en MW (separadas por comas: C.Nuclear, C.Hidroeléctrica, C.Térmica)", value="1000,300,500").split(',')
     capacidad = [int(c) for c in capacidad]
 
     # Costo de producción de las plantas
-    costo_produccion = st.text_input("Costo de producción de las plantas por MW (separadas por comas)", value="23,13,31").split(',')
+    costo_produccion = st.text_input("Costo de producción de las plantas por MW (separadas por comas: C.Nuclear, C.Hidroeléctrica, C.Térmica)", value="23,13,31").split(',')
     costo_produccion = [int(c) for c in costo_produccion]
 
     # Demanda de cada cliente por día
     demanda = []
     for i in range(m):
-        demanda_cliente = st.text_input(f"Demanda del cliente {i+1} por día (separadas por comas)", value="61,149,104").split(',')
+        demanda_cliente = st.text_input(f"Demanda del cliente {i+1} por día (separadas por comas: Día 1, Día 2,..., Día n)", value="61,149,104").split(',')
         demanda_cliente = [int(d) for d in demanda_cliente]
         demanda.append(demanda_cliente)
     
     # Pago por MW para cada cliente
-    pago_por_mw = st.text_input("Pago por MW para cada cliente (separados por comas)", value="40,55,45").split(',')
+    pago_por_mw = st.text_input("Pago por MW para cada cliente (separados por comas: Cliente 1, Cliente 2,..., Cliente n)", value="40,55,45").split(',')
     pago_por_mw = [int(p) for p in pago_por_mw]
 
     # Botón para ejecutar el modelo
@@ -97,7 +107,8 @@ with st.form("parametros"):
             # Convertir los resultados en DataFrames y mostrarlos en tablas
             produccion_df = pd.DataFrame(resultado.solution.produccion, 
                                           columns=[f'Día {i+1}' for i in range(n)],
-                                          index=[f'Planta {i+1}' for i in range(len(capacidad))])
+                                          index=[nombres_plantas[i] for i in range(len(capacidad))])
+
             st.write("Producción por planta por día:")
             st.table(produccion_df)
 
