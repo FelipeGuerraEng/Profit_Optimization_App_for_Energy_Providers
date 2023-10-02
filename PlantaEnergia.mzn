@@ -15,14 +15,14 @@ array[CLIENTES] of int: pago_por_mw; % Pago por MW para cada cliente
 int: G; % Porcentaje mínimo de la demanda que debe ser satisfecha
 
 % Variables
-array[PLANTAS,DIAS] of var 0..max(capacidad): produccion; % Producción diaria para cada planta
-array[CLIENTES,DIAS] of var 0..max([demanda[c,d] | c in CLIENTES, d in DIAS]): entregado; % Energía entregada a cada cliente
+array[PLANTAS,DIAS] of var int: produccion; % Producción diaria para cada planta
+array[CLIENTES,DIAS] of var int: entregado; % Energía entregada a cada cliente
 
 % Restricciones
 
 % La producción total diaria no debe exceder la capacidad de las plantas
 constraint forall(d in DIAS, p in PLANTAS) (
-    produccion[p,d] <= capacidad[p]
+    produccion[p,d] <= capacidad[p] /\ produccion[p,d] >= 0
 );
 
 % La energía entregada a cada cliente debe ser igual a su demanda o al menos G% de la demanda si no es posible satisfacerla completamente
