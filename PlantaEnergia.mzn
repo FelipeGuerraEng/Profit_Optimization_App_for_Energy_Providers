@@ -9,9 +9,9 @@ set of int: PLANTAS = 1..3; % Conjunto de plantas: 1-Nuclear, 2-Hidroeléctrica,
 
 array[DIAS] of var 0..n: dias_regimen_alto;
 array[PLANTAS] of int: capacidad; % Capacidad de producción diaria para cada planta
-array[PLANTAS] of int: costo_produccion; % Costo de producción por MW para cada planta
+array[PLANTAS] of float: costo_produccion; % Costo de producción por MW para cada planta
 array[CLIENTES,DIAS] of int: demanda; % Demanda diaria para cada cliente
-array[CLIENTES] of int: pago_por_mw; % Pago por MW para cada cliente 
+array[CLIENTES] of float: pago_por_mw; % Pago por MW para cada cliente 
 int: G; % Porcentaje mínimo de la demanda que debe ser satisfecha
 
 % Variables
@@ -56,7 +56,7 @@ constraint forall(d in DIAS) (
 
 
 % Objetivo: Maximizar la ganancia neta
-var int: ganancia_neta = sum(c in CLIENTES, d in DIAS) (entregado[c,d] * pago_por_mw[c]) - 
+var float: ganancia_neta = sum(c in CLIENTES, d in DIAS) (entregado[c,d] * pago_por_mw[c]) - 
                          sum(p in PLANTAS, d in DIAS) (produccion[p,d] * costo_produccion[p]);
                     
 solve maximize ganancia_neta;
