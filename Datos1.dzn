@@ -3,9 +3,9 @@ m = 3;
 dias_regimen_alto_permitidos = 1;
 porcentaje_regimen_alto = 80;
 capacidad = [1000, 300, 500];
-costo_produccion = [23, 13, 31];
+costo_produccion = [23.5, 13.7, 31];
 demanda = [| 300, 149, 250
            | 89, 52, 135
            | 97, 110, 89 |];
-pago_por_mw = [40, 55, 45];
+pago_por_mw = [40.2, 55.6, 45.9];
 G = 50;
