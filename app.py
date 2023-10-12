@@ -51,7 +51,7 @@ with st.form("parametros"):
 
     # Costo de producción de las plantas
     costo_produccion = st.text_input("Costo de producción de las plantas por MW (separadas por comas: C.Nuclear, C.Hidroeléctrica, C.Térmica)", value="23,13,31").split(',')
-    costo_produccion = [int(c) for c in costo_produccion]
+    costo_produccion = [float(c) for c in costo_produccion]
 
     # Demanda de cada cliente por día
     demanda = []
@@ -62,7 +62,7 @@ with st.form("parametros"):
     
     # Pago por MW para cada cliente
     pago_por_mw = st.text_input("Pago por MW para cada cliente (separados por comas: Cliente 1, Cliente 2,..., Cliente n)", value="40,55,45").split(',')
-    pago_por_mw = [int(p) for p in pago_por_mw]
+    pago_por_mw = [float(p) for p in pago_por_mw]
 
     # Botón para ejecutar el modelo
     if st.form_submit_button("Ejecutar"):
